@@ -121,6 +121,22 @@ app.get('/api/dashboard/:cfHandle/:lcUsername/:ccUsername/:gfgUsername', async (
     ]);
 
     const cfData = cfRes.status === 'fulfilled' ? cfRes.value.data.result[0] : null;
+
+    let cfSolved = 0;
+if (cfData) {
+  try {
+    const cfSubmissions = await axios.get(
+      `https://codeforces.com/api/user.status?handle=${cfHandle}&from=1&count=10000`
+    );
+    const solved = new Set(
+      cfSubmissions.data.result
+        .filter(s => s.verdict === 'OK')
+        .map(s => s.problem.contestId + s.problem.index)
+    );
+    cfSolved = solved.size;
+  } catch {}
+}
+
     const lcStats = lcRes.status === 'fulfilled'
       ? lcRes.value.data.data.matchedUser.submitStats.acSubmissionNum
       : [];
@@ -130,18 +146,18 @@ app.get('/api/dashboard/:cfHandle/:lcUsername/:ccUsername/:gfgUsername', async (
     const lcHard = lcStats.find(s => s.difficulty === 'Hard')?.count || 0;
 
     res.json({
-      totalSolved: lcEasy + lcMedium + lcHard,
-      activeDays: 0, // placeholder until you track real submission history
-      donutData: {
-        gfg: 0, // GFG scraper needs selector fix, see earlier note
-        lcEasy,
-        lcMedium,
-        lcHard,
-        codechef: 0, // CodeChef scraper needs selector fix
-        codeforces: cfData ? 1 : 0, // placeholder, CF API doesn't give solved-count directly
-      },
-      cfRating: cfData?.rating || null,
-    });
+  totalSolved: lcEasy + lcMedium + lcHard + cfSolved,
+  activeDays: 0,
+  donutData: {
+    gfg: 0,
+    lcEasy,
+    lcMedium,
+    lcHard,
+    codechef: 0,
+    codeforces: cfSolved,
+  },
+  cfRating: cfData?.rating || null,
+});
   } catch (err) {
     res.status(500).json({ error: 'Failed to fetch dashboard data' });
   }
