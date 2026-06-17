@@ -102,6 +102,51 @@ app.get('/api/lc/:username', async (req, res) => {
   }
 });
 
+app.get('/api/dashboard/:cfHandle/:lcUsername/:ccUsername/:gfgUsername', async (req, res) => {
+  const { cfHandle, lcUsername, ccUsername, gfgUsername } = req.params;
+
+  try {
+    const [cfRes, lcRes, ccRes, gfgRes] = await Promise.allSettled([
+      axios.get(`https://codeforces.com/api/user.info?handles=${cfHandle}`),
+      axios.post('https://leetcode.com/graphql', {
+        query: `query getUserProfile($username: String!) {
+          matchedUser(username: $username) {
+            submitStats { acSubmissionNum { difficulty count } }
+          }
+        }`,
+        variables: { username: lcUsername }
+      }, { headers: { 'Content-Type': 'application/json', 'Referer': 'https://leetcode.com' } }),
+      axios.get(`https://www.codechef.com/users/${ccUsername}`, { headers: { 'User-Agent': 'Mozilla/5.0' } }),
+      axios.get(`https://auth.geeksforgeeks.org/user/${gfgUsername}/practice/`, { headers: { 'User-Agent': 'Mozilla/5.0' } })
+    ]);
+
+    const cfData = cfRes.status === 'fulfilled' ? cfRes.value.data.result[0] : null;
+    const lcStats = lcRes.status === 'fulfilled'
+      ? lcRes.value.data.data.matchedUser.submitStats.acSubmissionNum
+      : [];
+
+    const lcEasy = lcStats.find(s => s.difficulty === 'Easy')?.count || 0;
+    const lcMedium = lcStats.find(s => s.difficulty === 'Medium')?.count || 0;
+    const lcHard = lcStats.find(s => s.difficulty === 'Hard')?.count || 0;
+
+    res.json({
+      totalSolved: lcEasy + lcMedium + lcHard,
+      activeDays: 0, // placeholder until you track real submission history
+      donutData: {
+        gfg: 0, // GFG scraper needs selector fix, see earlier note
+        lcEasy,
+        lcMedium,
+        lcHard,
+        codechef: 0, // CodeChef scraper needs selector fix
+        codeforces: cfData ? 1 : 0, // placeholder, CF API doesn't give solved-count directly
+      },
+      cfRating: cfData?.rating || null,
+    });
+  } catch (err) {
+    res.status(500).json({ error: 'Failed to fetch dashboard data' });
+  }
+});
+
 app.listen(PORT, () => {
   console.log(`Server running on http://localhost:${PORT}`);
 });

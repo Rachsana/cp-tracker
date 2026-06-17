@@ -1,6 +1,7 @@
 import { PieChart, Pie, Cell } from 'recharts';
 
 function DonutRow({ label, data }) {
+  const total = data.reduce((sum, d) => sum + d.value, 0) || 1;
   return (
     <div className="mb-4">
       <div className="text-xs text-[#888] mb-2">{label}</div>
@@ -25,16 +26,16 @@ function DonutRow({ label, data }) {
   );
 }
 
-function ProblemDonut() {
-  const fundamentals = [{ name: 'GFG', value: 89, color: '#639922' }];
+function ProblemDonut({ donutData }) {
+  const fundamentals = [{ name: 'GFG', value: donutData.gfg || 0, color: '#639922' }];
   const dsa = [
-    { name: 'Easy', value: 202, color: '#639922' },
-    { name: 'Medium', value: 344, color: '#BA7517' },
-    { name: 'Hard', value: 60, color: '#A32D2D' },
+    { name: 'Easy', value: donutData.lcEasy || 0, color: '#639922' },
+    { name: 'Medium', value: donutData.lcMedium || 0, color: '#BA7517' },
+    { name: 'Hard', value: donutData.lcHard || 0, color: '#A32D2D' },
   ];
   const cp = [
-    { name: 'CodeChef', value: 100, color: '#D85A30' },
-    { name: 'Codeforces', value: 248, color: '#534AB7' },
+    { name: 'CodeChef', value: donutData.codechef || 0, color: '#D85A30' },
+    { name: 'Codeforces', value: donutData.codeforces || 0, color: '#534AB7' },
   ];
 
   return (
