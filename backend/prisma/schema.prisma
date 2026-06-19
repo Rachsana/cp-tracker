@@ -1,0 +1,55 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id               Int          @id @default(autoincrement())
+  email            String       @unique
+  password         String
+  username         String       @unique
+  codeforcesHandle String?
+  leetcodeHandle   String?
+  codechefHandle   String?
+  gfgHandle        String?
+  createdAt        DateTime     @default(now())
+  submissions      Submission[]
+  profile          Profile?
+}
+
+model Profile {
+  id             Int       @id @default(autoincrement())
+  userId         Int       @unique
+  user           User      @relation(fields: [userId], references: [id])
+  cfRating       Int?
+  cfMaxRating    Int?
+  cfRank         String?
+  lcTotalSolved  Int?
+  lcEasySolved   Int?
+  lcMediumSolved Int?
+  lcHardSolved   Int?
+  ccRating       Int?
+  ccStars        String?
+  gfgSolved      Int?
+  lastSynced     DateTime?
+}
+
+model Submission {
+  id          Int      @id @default(autoincrement())
+  userId      Int
+  user        User     @relation(fields: [userId], references: [id])
+  platform    String
+  problemId   String
+  problemName String
+  verdict     String
+  difficulty  String?
+  tags        String[]
+  solvedAt    DateTime
+  createdAt   DateTime @default(now())
+
+  @@unique([userId, platform, problemId])
+}
