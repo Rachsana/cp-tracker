@@ -1,4 +1,5 @@
 {
+<<<<<<< HEAD
   "name": "cp-tracker-backend",
   "version": "1.0.0",
   "main": "src/index.js",
@@ -22,5 +23,27 @@
   "devDependencies": {
     "nodemon": "^3.0.1",
     "prisma": "^5.0.0"
+=======
+  "name": "backend",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "description": "",
+  "dependencies": {
+    "@prisma/client": "^7.8.0",
+    "axios": "^1.18.0",
+    "cheerio": "^1.2.0",
+    "cors": "^2.8.6",
+    "express": "^5.2.1",
+    "ioredis": "^5.11.1"
+  },
+  "devDependencies": {
+    "prisma": "^7.8.0"
+>>>>>>> 6d5368b3e74091ce1517fb7e367b68c34bd1c07c
   }
 }

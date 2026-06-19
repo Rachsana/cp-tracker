@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 export default function StatCard({ icon, iconColor, label, value, badge, badgeColor }) {
   return (
     <div className="bg-dcard border border-dborder rounded-lg p-4">
@@ -17,3 +18,15 @@ export default function StatCard({ icon, iconColor, label, value, badge, badgeCo
     </div>
   );
 }
+=======
+function StatCard({ label, value }) {
+  return (
+    <div className="bg-[#1a1a1a] rounded-xl border border-[#2a2a2a] p-4">
+      <div className="text-xs text-[#555] mb-2">{label}</div>
+      <div className="text-3xl font-medium">{value}</div>
+    </div>
+  );
+}
+
+export default StatCard;
+>>>>>>> 6d5368b3e74091ce1517fb7e367b68c34bd1c07c

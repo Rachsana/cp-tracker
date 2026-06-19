@@ -8,6 +8,7 @@ datasource db {
 }
 
 model User {
+<<<<<<< HEAD
   id               Int          @id @default(autoincrement())
   email            String       @unique
   password         String
@@ -53,3 +54,30 @@ model Submission {
 
   @@unique([userId, platform, problemId])
 }
+=======
+  id        String   @id @default(uuid())
+  email     String   @unique
+  password  String
+  createdAt DateTime @default(now())
+
+  cfHandle  String?
+  lcHandle  String?
+  ccHandle  String?
+  gfgHandle String?
+
+  stats     Stat[]
+}
+
+model Stat {
+  id          String   @id @default(uuid())
+  userId      String
+  user        User     @relation(fields: [userId], references: [id])
+  platform    String
+  totalSolved Int      @default(0)
+  rating      Int?
+  rawData     Json?
+  fetchedAt   DateTime @default(now())
+
+  @@index([userId, platform])
+}
+>>>>>>> 6d5368b3e74091ce1517fb7e367b68c34bd1c07c

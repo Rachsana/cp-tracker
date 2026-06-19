@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -5,3 +6,6 @@
 html, body {
   background-color: #0D1117;
 }
+=======
+@import "tailwindcss";
+>>>>>>> 6d5368b3e74091ce1517fb7e367b68c34bd1c07c
