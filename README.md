@@ -41,8 +41,10 @@
 
 ## 📸 Snapshots
 
-![Dashboard](screenshots/dashboard.png)
-![Sync Feature](screenshots/sync.png)
+![Signup](screenshots/signup.png)
+![Signin](screenshots/signin.png)
+![Dashboard](screenshots/Dashboard.png)
+![Profile](screenshots/Profile.png)
 ![Submissions](screenshots/submissions.png)
 
 ## 🌐 Platforms Supported
