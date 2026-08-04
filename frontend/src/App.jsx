@@ -1,7 +1,7 @@
-
 import { Routes, Route, Navigate } from "react-router-dom";
 import { useRecoilValue } from "recoil";
 import { userAtom } from "./atoms/userAtom";
+
 import Login from "./pages/Login";
 import Signup from "./pages/Signup";
 import Dashboard from "./pages/Dashboard";
@@ -11,7 +11,11 @@ import Navbar from "./components/Navbar";
 
 function PrivateLayout({ children }) {
   const user = useRecoilValue(userAtom);
-  if (!user) return <Navigate to="/login" />;
+
+  if (!user) {
+    return <Navigate to="/login" replace />;
+  }
+
   return (
     <>
       <Navbar />
@@ -26,43 +30,36 @@ export default function App() {
       <Routes>
         <Route path="/login" element={<Login />} />
         <Route path="/signup" element={<Signup />} />
+
         <Route
           path="/dashboard"
-          element={<PrivateLayout><Dashboard /></PrivateLayout>}
+          element={
+            <PrivateLayout>
+              <Dashboard />
+            </PrivateLayout>
+          }
         />
+
         <Route
           path="/submissions"
-          element={<PrivateLayout><Submissions /></PrivateLayout>}
+          element={
+            <PrivateLayout>
+              <Submissions />
+            </PrivateLayout>
+          }
         />
+
         <Route
           path="/profile"
-          element={<PrivateLayout><Profile /></PrivateLayout>}
+          element={
+            <PrivateLayout>
+              <Profile />
+            </PrivateLayout>
+          }
         />
-        <Route path="*" element={<Navigate to="/dashboard" />} />
+
+        <Route path="*" element={<Navigate to="/dashboard" replace />} />
       </Routes>
     </div>
   );
 }
-
-import { useState, useEffect } from 'react';
-import Dashboard from './components/Dashboard';
-
-function App() {
-  const [data, setData] = useState(null);
-  const [error, setError] = useState(null);
-
-  useEffect(() => {
-    fetch('http://localhost:3000/api/dashboard/Rachnaa/RachnaSPatel/rachna_911/rrachnapil5y')
-      .then(res => res.json())
-      .then(setData)
-      .catch(() => setError('Failed to load dashboard data'));
-  }, []);
-
-  if (error) return <p className="text-red-400 p-6">{error}</p>;
-  if (!data) return <p className="text-white p-6">Loading...</p>;
-
-  return <Dashboard data={data} />;
-}
-
-export default App;
-
