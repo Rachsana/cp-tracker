@@ -1,4 +1,4 @@
-<<<<<<< HEAD
+
 import { Routes, Route, Navigate } from "react-router-dom";
 import { useRecoilValue } from "recoil";
 import { userAtom } from "./atoms/userAtom";
@@ -43,7 +43,7 @@ export default function App() {
     </div>
   );
 }
-=======
+
 import { useState, useEffect } from 'react';
 import Dashboard from './components/Dashboard';
 
@@ -65,4 +65,4 @@ function App() {
 }
 
 export default App;
->>>>>>> 6d5368b3e74091ce1517fb7e367b68c34bd1c07c
+
